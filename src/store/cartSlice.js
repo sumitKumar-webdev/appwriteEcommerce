@@ -132,11 +132,10 @@ const cartSlice = createSlice({
     .addCase(fetchCart.fulfilled, (state,action) =>{
         state.items = action.payload
     })
-    .addCase()
     .addCase(deleteFromAppwrite.fulfilled, (state,action)=>{
         state.items = state.items.filter(item=>item.id != action.payload.id);
     })
-    .addCase(clearCartFromAppwrite, (state)=>{
+    .addCase(clearCartFromAppwrite.fulfilled, (state)=>{
         state.items=[];
     });
  }

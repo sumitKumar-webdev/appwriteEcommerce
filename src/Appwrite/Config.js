@@ -8,14 +8,14 @@ export class appwriteServices {
     constructor() {
        this.client
        .setEndpoint(Conf.appwriteUrl)
-       .setEndpoint(Conf.appwriteProjectId)
+       .setProject(Conf.appwriteProjectId)
        
-       this.databases = new Databases();
-       this.bucket = new Storage();
+       this.databases = new Databases(this.client);
+       this.bucket = new Storage(this.client);
 
 
     }
-    async storeUserInfo({userId, address, pincode, Phone}){
+    async storeUserInfo({userId, countryCode, address, pincode, Phone}){
         try {
             return await this.databases.createDocument(
                 Conf.appwriteDatabaseId,
@@ -24,6 +24,7 @@ export class appwriteServices {
                 {
                     address,
                     pincode,
+                    countryCode,
                     Phone,
                 }
             );
@@ -59,14 +60,16 @@ export class appwriteServices {
             throw error
         }
     }
-    async getAllProducts(category){
+    async getAllProducts(category, limit=25){
         try {
             return await this.databases.listDocuments(
                 Conf.appwriteDatabaseId,
                 Conf.appwriteProductCollectionId,
                 [
-                    Query.equal('category', category)
+                    Query.equal('category', category),
+                    Query.limit(limit)
                 ]
+                
             );
             
         } catch (error) {
@@ -108,7 +111,7 @@ export class appwriteServices {
         }
     }
 
-    async updateProdouct(documentId,item){
+    async updateProduct(documentId,item){
         try {
             return await this.databases.updateDocument(
                 Conf.appwriteDatabaseId,

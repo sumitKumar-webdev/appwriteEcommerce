@@ -10,7 +10,8 @@ export const ProductCard = ({
     price=500,
     discount=10,
     width=180,
-    imgSrc = 'download.jpg'
+    imgSrc = 'download.jpg',
+    className=''
 }) => {
   return(
     <div 
@@ -19,7 +20,8 @@ export const ProductCard = ({
             <img 
             src={imgSrc}
             alt="product img"
-            className='rounded-xl w-full object-cover '/>
+            className={`rounded-xl h-96 w-full object-cover ${className}`}
+            />
 
         </div>
 
@@ -29,10 +31,10 @@ export const ProductCard = ({
 
         <div className='text-center text-sm flex justify-center gap-3 mt-1'>
             <span className='text-black-1 font-semibold'>
-                Rs.{price? price.toFixed(2):100}
+                Rs.{discount? Math.max(price-((price*discount)/100), 0).toFixed(2) : 500 }
             </span>
             <span className='text-xs items-center text-opacity-50 line-through text-gray-700 mt-[3px]'>
-                Rs.{discount? Math.max(price-((price*discount)/100), 0).toFixed(2) : 500 }
+            Rs.{price? price.toFixed(2):100}
             </span>
         </div>
     </div>
