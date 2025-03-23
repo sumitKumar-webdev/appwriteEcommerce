@@ -7,7 +7,7 @@ import { ArrowRight } from 'lucide-react'
 
 export const Footer = (props) => {
   return(
-   <footer className='w-full h-[500px] bg-[#0c0c0c]  text-white'>
+   <footer className='w-full h-[500px] bg-black-1 font-syne text-white'>
     <div className='flex justify-between pt-7 h-1/2'>
     <div className='ml-4 w-1/4'><Logo width={250} /></div>
     <div className='w-1/4'>
@@ -30,17 +30,17 @@ export const Footer = (props) => {
     </div>
     <div className='w-1/4'>
         <h2  className='font-medium'><big>Contact Details</big></h2>
-        <ul className='space-y-1'>
+        <ul className='space-y-1 '>
             <li className='flex items-center gap-2 text-sm'> <Phone color='white' size={18}/>  +91 9999999999</li>
             <li className='flex items-center gap-2 text-sm'><Mail size={18} /> abc@gmail.com</li>
-            <li className='text-sm '>Address: Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016
+            <li className='text-sm max-w-[250px]'>Address: Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016
             </li>
         </ul>
     </div>
     </div>
     <div className='flex justify-center items-center flex-col py-3 mt-8 text-center'>
         <p className='text-lg font-medium'>SUBSCRIBE TO STAY IN THE LOOP WITH THE LATEST UPDATES!</p>
-        <div className='relative'><Input placeholder=' Email' className='mt-1 h-10 w-96 border border-white bg-[#0c0c0c] '  />
+        <div className='relative'><Input placeholder=' Email' className='mt-1 h-10 w-96 border border-white bg-black-1 '  />
         <button type='submit' className='absolute right-2 top-1/2 transform -translate-y-1/2'>
         <ArrowRight  />
         

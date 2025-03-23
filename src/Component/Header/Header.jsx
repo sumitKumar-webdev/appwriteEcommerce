@@ -32,7 +32,7 @@ export const Header = () => {
 
 
   return(
-    <header className='w-full py-4   border-t-[1px] shadow bg-[#0c0c0c]'>
+    <header className='w-full py-4   border-t-[1px] shadow bg-black-1'>
 
         <nav className='flex justify-between '>
             {/* -----------------Logo--------------- */}
@@ -45,7 +45,7 @@ export const Header = () => {
             <div >
                 <ul className='flex mt-1 space-x-14 '>
                     {navItem.map((item)=>(
-                        <li key={item.name} className='text-white font-sans '>
+                        <li key={item.name} className='text-white font-syne '>
                             {/* <Link to={item.slug}> {item.name} </Link>//add after confuring router */}
                             {item.name}
                             

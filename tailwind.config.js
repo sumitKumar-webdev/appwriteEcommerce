@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'black-1': '#0c0c0c'
+      },
+      fontFamily: {
+        raleway: ['Raleway', 'sans-serif'],
+        syne: ['Syne', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }

@@ -14,7 +14,7 @@ export const ProductCard = ({
 }) => {
   return(
     <div 
-    className="h-[380px] cursor-pointer  transition-transform duration-700 hover:scale-105 " style={{ width: `${width}px` }}>
+    className="h-[380px] cursor-pointer  transition-transform duration-700 hover:scale-105  font-syne" style={{ width: `${width}px` }}>
         <div className='flex justify-center'>
             <img 
             src={imgSrc}
@@ -28,7 +28,7 @@ export const ProductCard = ({
         </div>
 
         <div className='text-center text-sm flex justify-center gap-3 mt-1'>
-            <span className='text-[#0c0c0c] font-semibold'>
+            <span className='text-black-1 font-semibold'>
                 Rs.{price? price.toFixed(2):100}
             </span>
             <span className='text-xs items-center text-opacity-50 line-through text-gray-700 mt-[3px]'>
