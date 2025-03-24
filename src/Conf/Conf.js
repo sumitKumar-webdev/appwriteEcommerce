@@ -9,6 +9,6 @@ const Conf ={
 
 
 }
-console.log(Conf);
+// console.log(Conf);
 
 export default Conf

@@ -25,13 +25,13 @@ export const syncCart = createAsyncThunk(
         const { cartItem } = getState().cart
         //FIXME:there check if its providing id in what manner and fix this
         const userId = getState().auth.userData.$id;
-        console.log("chech cart slice sync cart",userdata);
+        console.log("chech cart slice sync cart",userId);
 
         if (!userId || cartItem.length === 0) return;
         await Promise.all(
             cartItem.map((item) =>{
                 if (item.$id) {
-                    return Service.updateProdouct(item.$id, item)
+                    return Service.updateProduct(item.$id, item)
                 }else {
                     return Service.addToCart(userId,item.productId,item.size)
                 }
@@ -63,6 +63,7 @@ export const clearCartFromAppwrite = createAsyncThunk(
             Promise.all(cartItems.documents.map((item)=>{
                 Service.removeFromCart(item.$id)
             }))
+            return [];
         } catch (error) {
             console.log("clearCartFromAppwrite :: cartSlice :: error", error);
             
@@ -75,8 +76,8 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         items: [],
-        totalAmount: 0,
-        totalItem: 0
+        totalAmount: 5,
+        totalItem: 5
     },
 
     reducers:{
@@ -130,10 +131,12 @@ const cartSlice = createSlice({
  extraReducers: (builder) =>{
     builder
     .addCase(fetchCart.fulfilled, (state,action) =>{
-        state.items = action.payload
+        state.items = action.payload;
+        state.totalItem = action.payload.length;
+    state.totalAmount = action.payload.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     })
     .addCase(deleteFromAppwrite.fulfilled, (state,action)=>{
-        state.items = state.items.filter(item=>item.id != action.payload.id);
+        state.items = state.items.filter(item=>item.$id != action.payload.id);
     })
     .addCase(clearCartFromAppwrite.fulfilled, (state)=>{
         state.items=[];

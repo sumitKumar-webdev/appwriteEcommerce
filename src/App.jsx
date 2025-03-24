@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 import authService from './Appwrite/Authentication.js'
 import { login, logout } from './store/authSlice.js'
 import { CategorySection } from './Component/CategorySection.jsx'
+import { Cart } from './Component/Cart.jsx'
 
 
 
@@ -36,8 +37,9 @@ useEffect(()=>{
     <div className='min-h-screen flex flex-wrap content-between'>
      {/* <OfferBanner /> */}
      {/* <Header /> */}
-       
-        <CategorySection />
+       {/* <CategorySection /> */}
+       <Cart />
+        {/* <Login /> */}
 
          {/* <outlet /> */}
  
