@@ -4,7 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
-import {createBrowserRouter} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import {CartPage, HomePage, LoginPage, OrderPage, SignUpPage, UserInfoPage} from './Component/index.js'
+import {AboutPage} from './Component/index.js'
+import {ContactUsPage} from './Component/index.js'
+import {ProductPage} from './Component/index.js'
+import {AllProductsPage} from './Component/index.js'
+
 
 const router = createBrowserRouter([
   {
@@ -13,16 +19,52 @@ const router = createBrowserRouter([
     children:[
       {
         path: '/',
-        // element: <Home />
+        index: true,
+        element: <HomePage />
+      },
+      {
+        path: 'about',
+        element: <AboutPage />
+      },
+      {
+        path: 'product/:productId',
+        element: <ProductPage />
+      },
+      {
+        path: 'products/:category',
+        element: <AllProductsPage />
+      },
+      {
+        path:'contact',
+        element: <ContactUsPage />
+      },
+      {
+        path: 'cart',
+        element: <CartPage />
+      },
+      {
+        path: 'login',
+        element: <LoginPage />
+      },
+      {
+        path: 'userinfo',
+        element: <UserInfoPage />
+      },
+      {
+        path: 'signup',
+        element: <SignUpPage />
+      },
+      {
+        path: 'order',
+        element: <OrderPage />
       }
     ]
+
   }
-]) // TODO: complete it after building pages
+])
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <Provider store={store}>
-    <App />
+    <RouterProvider router={router} />
     </Provider>
-  </StrictMode>,
 )

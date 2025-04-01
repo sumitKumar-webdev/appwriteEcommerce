@@ -2,30 +2,58 @@ import React from 'react'
 import { Logo } from '../Logo/Logo'
 import { Phone } from 'lucide-react'
 import { Mail } from 'lucide-react'
-import  Input  from '../index.js'
+import { Input } from '../input'
 import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export const Footer = (props) => {
+    const navigate = useNavigate();
   return(
-   <footer className='w-full h-[500px] bg-black-1 font-syne text-white'>
+   <footer className='w-full relative bottom-0 h-[500px] bg-black-1 font-syne text-white'>
     <div className='flex justify-between pt-7 h-1/2'>
-    <div className='ml-4 w-1/4'><Logo width={250} /></div>
+    <div 
+       onClick={()=>(navigate('/'), window.scrollTo({top: 0, behavior: 'smooth'}))} className='ml-4 cursor-pointer w-1/4'>
+       <Logo width={250} />
+    </div>
     <div className='w-1/4'>
-        <h2 className='font-medium'><big>QUICK LINKS</big></h2>
+        <h2 className='font-bold text-xl'>QUICK LINKS</h2>
         <ul>
-            <li>Home</li>
-            <li>About</li>
-            <li>Products</li>
-            <li>Contact</li>
+            <li 
+            className='cursor-pointer' 
+            onClick={()=>(navigate('/'),
+            window.scrollTo({top: 0, behavior: 'smooth'}))}>
+                Home
+            </li>
+            <li 
+            className='cursor-pointer' 
+            onClick={()=>(navigate('/about'),
+            window.scrollTo({top: 0, behavior: 'smooth'}))}>
+                About
+            </li>
+            <li 
+            className='cursor-pointer' 
+            onClick={()=>(window.scrollTo({top: 0, behavior: 'smooth'}))}>
+                Product
+            </li>
+            <li 
+            className='cursor-pointer' 
+            onClick={()=>(navigate('/contact'),
+            window.scrollTo({top: 0, behavior: 'smooth'}))}>
+                Contact
+            </li>
         </ul>
     </div>
     <div className='w-1/4'>
-        <h2  className='font-medium'><big>POLICIES</big></h2>
+        <h2  className='font-bold text-xl'>POLICIES</h2>
         <ul>
-            <li>Privacy Policy</li>
-            <li>Refund Policy</li>
-            <li>Terms of Policy</li>
-            <li>Shipping Policy</li>
+            <li className='cursor-pointer' 
+            onClick={()=>(window.scrollTo({top: 0, behavior: 'smooth'}))}>Privacy Policy</li>
+            <li className='cursor-pointer' 
+            onClick={()=>(window.scrollTo({top: 0, behavior: 'smooth'}))}>Refund Policy</li>
+            <li className='cursor-pointer' 
+            onClick={()=>(window.scrollTo({top: 0, behavior: 'smooth'}))}>Terms of Policy</li>
+            <li className='cursor-pointer' 
+            onClick={()=>(window.scrollTo({top: 0, behavior: 'smooth'}))}>Shipping Policy</li>
         </ul>
     </div>
     <div className='w-1/4'>
@@ -38,7 +66,7 @@ export const Footer = (props) => {
         </ul>
     </div>
     </div>
-    <div className='flex justify-center items-center flex-col py-3 mt-8 text-center'>
+    <div className='flex justify-center items-center flex-col py-3 mt-5 text-center'>
         <p className='text-lg font-medium'>SUBSCRIBE TO STAY IN THE LOOP WITH THE LATEST UPDATES!</p>
         <div className='relative'><Input placeholder=' Email' className='mt-1 h-10 w-96 border border-white bg-black-1 '  />
         <button type='submit' className='absolute right-2 top-1/2 transform -translate-y-1/2'>

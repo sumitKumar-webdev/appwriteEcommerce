@@ -1,10 +1,5 @@
 import React from 'react'
 
-/**
-* @author
-* @function ProductCard
-**/
-
 export const ProductCard = ({
     title,
     price=500,
@@ -15,7 +10,8 @@ export const ProductCard = ({
 }) => {
   return(
     <div 
-    className="h-[380px] cursor-pointer  transition-transform duration-700 hover:scale-105  font-syne" style={{ width: `${width}px` }}>
+    className="h-[380px] cursor-pointer  transition-transform duration-300 hover:scale-105  font-syne"
+    style={{ width: `${width}px` }}>
         <div className='flex justify-center'>
             <img 
             src={imgSrc}
@@ -26,7 +22,7 @@ export const ProductCard = ({
         </div>
 
         <div className='text-center text-sm'>
-            <span>{title ? title :'Premium Oversized SILVER Cotton T-Shirt'}</span>
+            <span className='font-syne text-lg font-semibold'>{title ? title :'Premium Oversized SILVER Cotton T-Shirt'}</span>
         </div>
 
         <div className='text-center text-sm flex justify-center gap-3 mt-1'>

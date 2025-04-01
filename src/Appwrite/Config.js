@@ -15,22 +15,39 @@ export class appwriteServices {
 
 
     }
-    async storeUserInfo({userId, countryCode, address, pincode, Phone}){
+    async storeUserInfo({userId, countryCode, address, pincode, phone}){
         try {
             return await this.databases.createDocument(
                 Conf.appwriteDatabaseId,
                 Conf.appwriteUserInfoCollectionId,
-                userId,
-                {
+                ID.unique(),
+                { 
+                    userId,
                     address,
                     pincode,
                     countryCode,
-                    Phone,
+                    phone,
                 }
             );
             
         } catch (error) {
             console.log("Appwrite Service :: storeUserInfo :: error", error);
+            throw error
+        }
+    }
+
+    async getUserInfo(id){
+        try {
+            return await this.databases.listDocuments(
+                Conf.appwriteDatabaseId,
+                Conf.appwriteUserInfoCollectionId,
+                [
+                    Query.equal('userId', id)
+                ]
+
+            )
+        } catch (error) {
+            console.log("Appwrite Service :: getUserInfo :: error", error);
             throw error
         }
     }
@@ -50,11 +67,14 @@ export class appwriteServices {
     }
     async getProduct(productId){
         try {
-            return await this.databases.getDocument(
+
+            const product = await this.databases.getDocument(
                 Conf.appwriteDatabaseId,
-                appwriteProductCollectionId,
+                Conf.appwriteProductCollectionId,
                 productId
             )
+            return product;
+            
         } catch (error) {
             console.log("Appwrite Service :: getProduct :: error", error);
             throw error
@@ -79,7 +99,7 @@ export class appwriteServices {
     }
 
     // Database Storage and services
-    async addToCart(userId, productId, size){
+    async addToCart(userId, productId, size, color, quantity){
         try {
             return await this.databases.createDocument(
                 Conf.appwriteDatabaseId,
@@ -88,7 +108,9 @@ export class appwriteServices {
                 {
                     userId,
                     productId,
-                    size
+                    size,
+                    color,
+                    quantity
                 }
             ) 
         } catch (error) {
@@ -140,6 +162,45 @@ export class appwriteServices {
             throw error
         }
     }
+    //Order cart 
+    async storeOrder({userId, productId, quantity, paymentMethod}){
+
+        try {
+            return await this.databases.createDocument(
+                Conf.appwriteDatabaseId,
+                Conf.appwriteOrderCollectionId,
+                ID.unique(),
+                { 
+                    userId,
+                    productId,
+                    quantity,
+                    paymentMethod
+                }
+            );
+        } catch (error) {
+            console.log("Appwrite Service :: storeOrder :: error", error);
+            throw error
+        }
+
+    }
+
+    async getOrderItems(userId){
+        try {
+            return await this.databases.listDocuments(
+                Conf.appwriteDatabaseId,
+                Conf.appwriteOrderCollectionId,
+                [
+                    Query.equal('userId', userId)
+                ]
+
+            )
+        } catch (error) {
+            console.log("Appwrite Service :: getOrderItems :: error", error);
+            throw error
+        }
+    }
+
+
 }
 
 const Service = new appwriteServices();

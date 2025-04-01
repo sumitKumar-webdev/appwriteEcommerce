@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import  img1   from '../assets/img1.jpg'
-import  img2  from '../assets/img2.jpg'
-import  img3  from '../assets/img3.jpg'
 
-const images =[img1,img2,img3];
+
+const images =[
+    'https://cloud.appwrite.io/v1/storage/buckets/67cef615000af5d7467d/files/67e67a2a00143da8ec0f/view?project=67cee1e8002271eb6b57&mode=admin',
+    'https://cloud.appwrite.io/v1/storage/buckets/67cef615000af5d7467d/files/67e67a310027b7db363c/view?project=67cee1e8002271eb6b57&mode=admin',
+    'https://cloud.appwrite.io/v1/storage/buckets/67cef615000af5d7467d/files/67e67a6a000da49bd30a/view?project=67cee1e8002271eb6b57&mode=admin'
+];
 
 export const ImgSlider = (props) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +23,7 @@ export const ImgSlider = (props) => {
     },[]);
 
   return(
-    <div className='relative w-full h-[500px] overflow-hidden' >
+    <div className=' w-full relative h-[700px] overflow-clip' >
 
 
             <div className="flex transition-transform duration-700 ease-in-out"

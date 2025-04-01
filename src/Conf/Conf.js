@@ -6,6 +6,7 @@ const Conf ={
     appwriteProductCollectionId: String(import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION_ID),
     appwriteCartCollectionId: String(import.meta.env.VITE_APPWRITE_CART_COLLECTION_ID),
     appwriteUserInfoCollectionId: String(import.meta.env.VITE_APPWRITE_USER_COLLECTION_ID),
+    appwriteOrderCollectionId: String(import.meta.env.VITE_APPWRITE_ORDER_COLLECTION_ID),
 
 
 }

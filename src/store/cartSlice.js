@@ -22,18 +22,16 @@ export const fetchCart = createAsyncThunk(
 export const syncCart = createAsyncThunk(
     'cart/syncCart',
     async (_, {getState}) => {
-        const { cartItem } = getState().cart
-        //FIXME:there check if its providing id in what manner and fix this
+        const { items } = getState().cart
         const userId = getState().auth.userData.$id;
-        console.log("chech cart slice sync cart",userId);
 
-        if (!userId || cartItem.length === 0) return;
+        if (!userId || items.length === 0) return;
         await Promise.all(
-            cartItem.map((item) =>{
+            items.map((item) =>{
                 if (item.$id) {
                     return Service.updateProduct(item.$id, item)
                 }else {
-                    return Service.addToCart(userId,item.productId,item.size)
+                    return Service.addToCart(userId,...item)
                 }
             })
         )
@@ -76,19 +74,23 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         items: [],
-        totalAmount: 5,
-        totalItem: 5
+        checkoutItems: [],
+        totalAmount: 0,
+        totalItem: 0
     },
 
     reducers:{
+
         addToCart: (state, action)=>{
             const newItem = action.payload;
-            const existingItem = state.items.find(item=>item.id === newItem.id);
+            const existingItem = state.items.find(item=>( item.product_id === newItem.product_id) && (item.size === newItem.size) && (item.color === newItem.color));
             state.totalItem++;
             state.totalAmount += newItem.price;
+            console.log('newItem',newItem);
+            
 
             if(!existingItem){
-                state.items.push({ ...action.payload, quantity: 1});
+                state.items.push({ ...action.payload, quantity: 1, color: action.payload.color});
             }else{
                 existingItem.quantity++;
             }
@@ -96,16 +98,21 @@ const cartSlice = createSlice({
    
 
     removeFromCart: (state, action)=>{
-        const Item = state.items.find(item=>item.id === action.payload.id);
+        const productId = action.payload.product_id
+        const Item = state.items.find(item=>item.product_id === productId);
+        console.log('Item in cart Slice',Item);
         if (Item) {
-            state.items = state.items.filter(item=>item.id != action.payload.id);
+            
+            state.items = state.items.filter(item=> !(item.product_id === productId && item.size === action.payload.size && item.color === action.payload.color));
+            
+            
             state.totalAmount -= Item.price*Item.quantity;
             state.totalItem -= Item.quantity;
         }
     },
 
     incQuantity: (state, action)=>{
-        const item = state.items.find(item=>item.id === action.payload.id);
+        const item = state.items.find(item=>item.product_id === action.payload.product_id);
        if (item) {
         item.quantity++;
         state.totalAmount += item.price;
@@ -114,7 +121,7 @@ const cartSlice = createSlice({
     },
 
     decQuantity: (state, action)=>{
-        const item = state.items.find(item=>item.id === action.payload.id);
+        const item = state.items.find(item=>item.product_id === action.payload.product_id);
        if (item && item.quantity > 1) {
         item.quantity--;
         state.totalAmount -= item.price;
@@ -126,17 +133,34 @@ const cartSlice = createSlice({
         state.items = [];
         state.totalAmount = 0;
         state.totalItem = 0;
-    }
+    },
+
+    setCheckoutItem: (state, action) => {
+        const newProduct = action.payload;
+        const existingProduct = state.checkoutItems.find(item=>( item.product_id === newProduct.product_id) && (item.size === newProduct.size) && (item.color === newProduct.color));
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            state.checkoutItems.push({ ...action.payload, quantity: 1, color: action.payload.color, size: action.payload.size });
+        }
+      }
  },
  extraReducers: (builder) =>{
     builder
     .addCase(fetchCart.fulfilled, (state,action) =>{
-        state.items = action.payload;
-        state.totalItem = action.payload.length;
-    state.totalAmount = action.payload.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    })
+       action.payload.forEach((newItem)=>{
+       const existingItem = state.items.find((item)=>item.product_id === newItem.product_id && item.color === newItem.color && item.size === newItem.size);
+       if (existingItem) {
+        existingItem.quantity += newItem.quantity
+       }else{
+        state.items.push(newItem)
+       }
+       state.totalItem += newItem.quantity;
+       state.totalAmount += newItem.price * newItem.quantity;
+        })
+       })
     .addCase(deleteFromAppwrite.fulfilled, (state,action)=>{
-        state.items = state.items.filter(item=>item.$id != action.payload.id);
+        state.items = state.items.filter(item=>item.$id != action.payload.$id);
     })
     .addCase(clearCartFromAppwrite.fulfilled, (state)=>{
         state.items=[];
@@ -144,5 +168,5 @@ const cartSlice = createSlice({
  }
 });
 
-export const {addToCart, removeFromCart, incQuantity, decQuantity, emptyCart} = cartSlice.actions;
+export const {addToCart, removeFromCart, incQuantity, decQuantity, emptyCart, setCheckoutItem} = cartSlice.actions;
 export default cartSlice.reducer;
