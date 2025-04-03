@@ -99,16 +99,17 @@ export class appwriteServices {
     }
 
     // Database Storage and services
-    async addToCart(userId, productId, size, color, quantity){
+    async addToCart({user_id, price, product_id, size, color, quantity}){
         try {
             return await this.databases.createDocument(
                 Conf.appwriteDatabaseId,
                 Conf.appwriteCartCollectionId,
                 ID.unique(),
                 {
-                    userId,
-                    productId,
+                    user_id,
+                    product_id,
                     size,
+                    price,
                     color,
                     quantity
                 }
@@ -133,7 +134,7 @@ export class appwriteServices {
         }
     }
 
-    async updateProduct(documentId,item){
+    async updateProduct({documentId,item}){
         try {
             return await this.databases.updateDocument(
                 Conf.appwriteDatabaseId,
@@ -162,8 +163,9 @@ export class appwriteServices {
             throw error
         }
     }
+
     //Order cart 
-    async storeOrder({userId, productId, quantity, paymentMethod}){
+    async storeOrder({userId, productId, quantity, paymentMethod, status}){
 
         try {
             return await this.databases.createDocument(
@@ -174,7 +176,8 @@ export class appwriteServices {
                     userId,
                     productId,
                     quantity,
-                    paymentMethod
+                    paymentMethod,
+                    status
                 }
             );
         } catch (error) {

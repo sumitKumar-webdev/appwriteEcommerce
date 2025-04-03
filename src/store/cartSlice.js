@@ -24,14 +24,35 @@ export const syncCart = createAsyncThunk(
     async (_, {getState}) => {
         const { items } = getState().cart
         const userId = getState().auth.userData.$id;
-
         if (!userId || items.length === 0) return;
         await Promise.all(
-            items.map((item) =>{
+            items.map(async(item) =>{    
                 if (item.$id) {
-                    return Service.updateProduct(item.$id, item)
+                    const updatingItem = {
+                        documentId: item.$id,
+                        user_id : userId,
+                        product_id: item.product_id,
+                        price: item.price,
+                        quantity: item.quantity,
+                        size: item.size,
+                        color: item.color
+                    }
+                    return Service.updateProduct(updatingItem)
+                    
                 }else {
-                    return Service.addToCart(userId,...item)
+                    console.log('Adding to cart ');
+                    const itemdetails = {
+                        user_id : userId,
+                        product_id: item.product_id,
+                        price: item.price,
+                        quantity: item.quantity,
+                        size: item.size,
+                        color: item.color
+                    }
+                    const addedItem = await Service.addToCart(itemdetails);
+                    return addedItem
+                    
+                    
                 }
             })
         )
@@ -43,7 +64,7 @@ export const deleteFromAppwrite = createAsyncThunk(
     async(documentId, {rejectWithValue}) =>{
         try {
             await Service.removeFromCart(documentId);
-            return documentId 
+            return documentId;
         } catch (error) {
             console.log("deleteFromAppwrite :: cartSlice :: error", error);
             
@@ -86,7 +107,6 @@ const cartSlice = createSlice({
             const existingItem = state.items.find(item=>( item.product_id === newItem.product_id) && (item.size === newItem.size) && (item.color === newItem.color));
             state.totalItem++;
             state.totalAmount += newItem.price;
-            console.log('newItem',newItem);
             
 
             if(!existingItem){
@@ -136,13 +156,14 @@ const cartSlice = createSlice({
     },
 
     setCheckoutItem: (state, action) => {
-        const newProduct = action.payload;
-        const existingProduct = state.checkoutItems.find(item=>( item.product_id === newProduct.product_id) && (item.size === newProduct.size) && (item.color === newProduct.color));
+        const newProducts = action.payload;
+        newProducts.map((newProduct)=>{const existingProduct = state.checkoutItems.find(item=>( item.product_id === newProduct.product_id) && (item.size === newProduct.size) && (item.color === newProduct.color));
         if (existingProduct) {
             existingProduct.quantity++;
         } else {
-            state.checkoutItems.push({ ...action.payload, quantity: 1, color: action.payload.color, size: action.payload.size });
-        }
+            state.checkoutItems.push({ ...newProduct, quantity: 1, color: newProduct.color, size: newProduct.size });
+        }})
+        
       }
  },
  extraReducers: (builder) =>{
@@ -160,7 +181,9 @@ const cartSlice = createSlice({
         })
        })
     .addCase(deleteFromAppwrite.fulfilled, (state,action)=>{
-        state.items = state.items.filter(item=>item.$id != action.payload.$id);
+        state.items = state.items.filter(item=>item.$id != action.payload);
+        state.totalItem -= action.payload.quantity
+        state.totalAmount -+ action.payload.price*action.payload.quantity
     })
     .addCase(clearCartFromAppwrite.fulfilled, (state)=>{
         state.items=[];

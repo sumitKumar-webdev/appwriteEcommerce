@@ -10,6 +10,7 @@ import {AboutPage} from './Component/index.js'
 import {ContactUsPage} from './Component/index.js'
 import {ProductPage} from './Component/index.js'
 import {AllProductsPage} from './Component/index.js'
+import { ProfilePage } from './Component/index.js'
 
 
 const router = createBrowserRouter([
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: 'order',
         element: <OrderPage />
+      },
+      {
+        path: 'profile',
+        element: <ProfilePage />
       }
     ]
 

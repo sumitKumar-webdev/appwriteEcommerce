@@ -10,36 +10,12 @@ const Order = () => {
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState();
   const navigate = useNavigate();
-  const Items = useSelector((state)=>state.cart.checkoutItems)
+  const Items = useSelector((state)=>state.cart.checkoutItems);
+  console.log('Items' , Items);
+
   const UserData = useSelector((state)=> state.auth.userData)  
   const totalAmount = Items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-
-  //getting user info
-  useEffect(()=>{
-    const fetchUserInfo = async () => {
-    const userInfo = await Service.getUserInfo(UserData.$id)
-    setUserInfo(userInfo.documents[0])
-}
-fetchUserInfo();
-  },[])
-
-console.log('userInfo', userInfo);
-
   
-
-  const handleProceed = () => {
-    if (paymentMethod === "COD") {
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate("/");
-      }, 3000);
-    } else {
-      navigate("/payment-gateway");
-    }
-  };
-
   useEffect(()=>{
     setLoading(true)
     let productData = {...product};
@@ -57,12 +33,52 @@ console.log('userInfo', userInfo);
             
         }
     }
-    console.log(productData);
     setProduct(prev => ({ ...prev, ...productData }));
     setLoading(false)
-};
-fetchProduct();
-},[Items])
+  };
+  fetchProduct();
+  },[Items])
+
+
+  //getting user info
+  useEffect(()=>{
+    const fetchUserInfo = async () => {
+    const userInfo = await Service.getUserInfo(UserData.$id)
+    setUserInfo(userInfo.documents[0])
+}
+fetchUserInfo();
+  },[])
+
+
+
+  
+
+  const handleProceed = async () => {
+    try {
+       await Promise.all(Items.map((item)=>Service.storeOrder({
+        userId:UserData?.$id,
+        productId: item?.product_id,
+        quantity: item?.quantity,
+        paymentMethod: paymentMethod,
+        status: 'Shipped'
+       })))
+    
+    } catch (error) {
+      console.error("Error storing orders:", error);
+    }
+    if (paymentMethod === "COD") {
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate("/profile");
+      }, 3000);
+    } else {
+      navigate("/payment-gateway");
+    }
+    
+   
+  };
+
 
   return (
     <div className="p-4 w-full relative min-h-[800px] font-syne mx-auto">
@@ -83,17 +99,19 @@ fetchProduct();
       )  : (
       <div className="border rounded-lg p-4 bg-white shadow">
         
-        {Items.map((item) => {
+        {Items.map((item, index) => {
            const productDetail = product[item?.product_id];           
           const imgId = productDetail?.productImg[0];                           
            const imgUrl = imgId? Service.getProductImg(imgId) : null;  
           
           return (
-          <div key={item.id} className="flex items-center gap-4 border-b py-3">
-            <img src={imgUrl} alt={productDetail?.title} className="w-16 h-16 rounded-md" />
+          <div key={index} className="flex items-center gap-4 border-b py-3">
+            <img src={imgUrl} alt={productDetail?.title} className="w-24 h-24 rounded-md" />
             <div className="flex-1">
-              <p className="font-medium">{productDetail?.title}</p>
-              <p className="text-gray-500">Rs. {productDetail?.price}</p>
+              <p className="font-semibold text-lg">{productDetail?.title}</p>
+              <p className="text-gray-500 text-[17px]">Size: {(item?.size)?.toUpperCase()}</p>
+              <p className="text-gray-500 text-[17px]">Color: {(item?.color)?.toUpperCase()}</p>
+              <p className="text-gray-500 text-[17px]">Rs. {productDetail?.price}</p>
             </div>
             <p className="font-semibold">Qty: {item.quantity}</p>
           </div>)

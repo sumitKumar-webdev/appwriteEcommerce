@@ -35,6 +35,8 @@ export const ProductComponent = ({discount=20}) => {
 // Product Images urls
 const productImgIds = product?.productImg;
 const productImgUrls = productImgIds?.map((id)=>(Service.getProductImg(id)));
+console.log(productImgUrls);
+
 
 // main Img
 const [mainImg , setMainImg] =useState();
@@ -69,13 +71,13 @@ useEffect(()=>{
         setError(true)
         return
       }
-      dispatch(setCheckoutItem({
+      dispatch(setCheckoutItem([{
         product_id: productId,
        price: product.price,
        quantity: 1,
        size: selectdSize,
       color: selectColor
-      }))
+      }]))
       navigate('/order')
       
     }
@@ -99,7 +101,7 @@ useEffect(()=>{
         </p>
         
        <div className='flex w-full p-10 justify-center'>
-        {/* left side for img */}
+        {/* left side for images */}
           <div className='h-[600px] flex justify-center flex-grow sm:px-5 lg:pl-16'>
           {/* side Images */}
              <div className='h-full flex flex-col gap-5'>
@@ -133,19 +135,6 @@ useEffect(()=>{
             <span className='text-green-500'>({discount}% OFF)</span>
             <p className='text-gray-500 font-thin text-xs'>Tax Included Shipping Calculated at Checkout</p>
         </div>
-        {/* <style>
-          {`
-          @keyframes errorAnimation {
-      0% { transform: translateY(0); }
-      25% { transform: translateY(-8px); }
-      50% { transform: translateY(8px); }
-      75% { transform: translateY(-4px); }
-      100% { transform: translateY(0); }
-    }
-    :root {
-      --zipper-animation: errorAnimation 0.5s ease-in-out;
-    }`}
-        </style> */}
 
         {error ? <p className='font-syne text-red-600 text-sm mt-2 transition animate-bounce'>Please select size</p> : null}
 
@@ -209,7 +198,7 @@ useEffect(()=>{
               <svg
                xmlns="http://www.w3.org/2000/svg"
                viewBox="0 0 511.934 511.934"
-               className="h-14 text-gray-800 dark:text-white"
+               className="h-14 text-gray-800"
                fill="currentColor" >
                 <path d="M381.822 223.199a7.503 7.503 0 0 0 8.852-5.861 139.256 139.256 0 0 0 2.793-27.788c0-76.046-61.682-137.915-137.5-137.915s-137.5 61.869-137.5 137.915 61.682 137.915 137.5 137.915c51.678 0 98.521-28.632 122.248-74.722 1.9-3.692.458-8.23-3.223-10.136-3.68-1.907-8.205-.458-10.105 3.232-21.142 41.068-62.877 66.58-108.919 66.58-67.547 0-122.5-55.119-122.5-122.87s54.953-122.87 122.5-122.87 122.5 55.119 122.5 122.87c0 8.343-.837 16.677-2.489 24.771-.831 4.071 1.786 8.046 5.843 8.879z" />
                 <path d="M339.413 161.572a7.506 7.506 0 0 0-6.069-5.122l-48.88-7.023-21.764-44.459c-2.486-5.525-10.98-5.524-13.465 0l-21.764 44.458-48.88 7.023c-6.014.665-8.627 8.772-4.161 12.843l35.429 34.5-8.446 48.798c-1.228 5.924 5.634 10.946 10.893 7.939l43.661-23.137 43.661 23.137c5.251 3.007 12.124-2.015 10.893-7.939l-8.446-48.798 35.429-34.5a7.533 7.533 0 0 0 1.909-7.72zm-50.629 34.195a7.538 7.538 0 0 0-2.166 6.684l6.511 37.619-33.659-17.837a7.484 7.484 0 0 0-7.007 0l-33.659 17.837 6.511-37.619a7.536 7.536 0 0 0-2.166-6.684l-27.313-26.597 37.683-5.415a7.502 7.502 0 0 0 5.669-4.131l16.778-34.273 16.778 34.273a7.504 7.504 0 0 0 5.669 4.131l37.683 5.415z" />

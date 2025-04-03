@@ -6,6 +6,7 @@ import {useForm} from 'react-hook-form'
 import authService from '../Appwrite/Authentication'
 import { Input } from './input'
 import { Eye, EyeClosed } from 'lucide-react'
+import { fetchCart } from '../store/cartSlice'
 
 
 
@@ -28,7 +29,11 @@ export const Login = (props) => {
             const userData = await authService.getCurrentUser()
             if(userData){
                 dispatch(storeLogin(userData));
+                //fetching cart as soon as login to avoid fetching again and again
+                dispatch(fetchCart(userData.$id))
+                
                 navigate('/');
+
             }else{
                 dispatch(logout())
             }

@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { decQuantity, fetchCart, incQuantity, syncCart, deleteFromAppwrite, removeFromCart } from '../store/cartSlice'
-import { Cross } from 'lucide-react'
+import { decQuantity, fetchCart, incQuantity, syncCart, deleteFromAppwrite, removeFromCart, setCheckoutItem } from '../store/cartSlice'
 import { useNavigate } from 'react-router-dom'
 import Service from '../Appwrite/Config'
-import { set } from 'react-hook-form'
 
-/**
-* @author
-* @function Cart
-**/
+
 
 export const Cart = ({deliveryCharge=0}) => {
     const navigate = useNavigate();
@@ -26,12 +21,8 @@ export const Cart = ({deliveryCharge=0}) => {
     
     
 
-    // fetching Cart data in appwrite
-    useEffect(()=>{
-        if(userId){
-            dispatch(fetchCart(userId))
-        }
-    },[userId])
+
+   
 
     //syncing cartData in Database
 
@@ -62,7 +53,6 @@ export const Cart = ({deliveryCharge=0}) => {
                 
             }
         }
-        console.log(productData);
         setProduct(prev => ({ ...prev, ...productData }));
         setLoading(false)
     };
@@ -97,7 +87,9 @@ export const Cart = ({deliveryCharge=0}) => {
             {!loading ?  (cartItems.map((item, index)=>{
                 const productDetail = product[item?.product_id];      
                const imgId = productDetail?.productImg[0];                           
-                const imgUrl = imgId? Service.getProductImg(imgId) : null;                  
+                const imgUrl = imgId? Service.getProductImg(imgId) : null;  
+                console.log(cartItems);
+                                
                 
                 return(
                 <div key={`${index}-${item?.size || "NA"}-${item?.$id}`} className='w-full h-60 border-b flex relative'>
@@ -129,7 +121,7 @@ export const Cart = ({deliveryCharge=0}) => {
                     </div>
                <button 
                onClick={() =>{
-                userId ?  dispatch(deleteFromAppwrite(item)) : dispatch(removeFromCart(item))}} 
+                userId ?  dispatch(deleteFromAppwrite(item.$id)) : dispatch(removeFromCart(item))}} 
                className="text-black/60 hover:text-black text-xl absolute top-2 right-2"
                >
                   ✖
@@ -166,7 +158,7 @@ export const Cart = ({deliveryCharge=0}) => {
                       
                   <div className='flex justify-between font-syne text-[15px] mt-5'>
                         <div><p>Item(s) subtotal</p></div>
-                        <div><p>Rs.{totalAmount}</p></div>
+                        <div><p>Rs.{totalAmount || 0}</p></div>
                    </div>
 
                   <div className='flex font-syne justify-between text-sm '>
@@ -202,7 +194,8 @@ export const Cart = ({deliveryCharge=0}) => {
                {/* boc Ended */}
                <div className='w-full h-20 flex items-center border p-2'>
                 <button 
-                onClick={()=>(dispatch(setCheckoutItem(cartItems)),navigate('/order'))}
+                // TODO: Here Dispatch to make Cart Empty
+                onClick={()=>(dispatch(setCheckoutItem(cartItems)), navigate('/order'))}
                 className='h-14 text-lg w-full rounded-md bg-black-1 text-white'>Continue</button></div>
             </div>
         </div> : 
@@ -223,7 +216,7 @@ export const Cart = ({deliveryCharge=0}) => {
            
             <button
             onClick={()=>navigate('/')}
-             className='h-10 w-44 mt-10 rounded-lg bg-black-1 text-white' >Back to homepage</button>
+             className='h-10 w-44 mt-10 rounded-lg hover:bg-black-1/80 bg-black-1 text-white' >Back to homepage</button>
          </div>
         </div>
         }

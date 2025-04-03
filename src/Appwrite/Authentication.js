@@ -52,7 +52,7 @@ export class authentication {
 
        async logout(){
         try {
-            return this.account.deleteSession();
+            return this.account.deleteSession('current');
             
         } catch (error) {
             console.log("Authentication  service :: logout :: error", error);

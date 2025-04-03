@@ -11,6 +11,7 @@ export const Header = () => {
     const navigate = useNavigate();
     const cartItems = useSelector((state)=>state.cart.totalItem)
     const user = useSelector((state)=>state.auth.status)
+    
     const [showDropdown ,setShowDropdown] = useState(false)
 
 
@@ -79,8 +80,7 @@ export const Header = () => {
                         <Search size={22} color='white'/>
                     </li>
                     <li
-                     // TODO: Here Navigate to orderPage
-                    onClick={user ? ()=>navigate('/order') : null}
+                    onClick={user ? ()=>navigate('/profile') : ()=>navigate('/login')}
                      className='cursor-pointer'>
                         <User size={22} color='white'/>
                     </li>

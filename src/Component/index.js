@@ -11,6 +11,7 @@ import { LoginPage } from "../Pages/LoginPage";
 import { SignUpPage } from "../Pages/SignUpPage";
 import { UserInfoPage } from "../Pages/UserInfoPage";
 import { OrderPage } from "../Pages/OrderPage";
+import { ProfilePage } from "../Pages/ProfilePage";
 
 
 
@@ -27,7 +28,9 @@ export  {
     LoginPage,
     SignUpPage,
     UserInfoPage,
-    OrderPage
+    OrderPage,
+    ProfilePage
+
 
 
 }
