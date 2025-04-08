@@ -1,5 +1,5 @@
 import { OfferBanner } from "./OfferBanner/OfferBanner";
-import { ImgSlider } from "./imgSlider";
+import { ImgSlider } from "./ImgSlider";
 import { Input } from "./input";
 import {HomePage } from "../Pages/HomePage";
 import { AboutPage } from '../Pages/AboutPage'
